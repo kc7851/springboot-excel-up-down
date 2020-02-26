@@ -1,17 +1,11 @@
 package com.skc.excel.utils;
 
+import org.apache.poi.ss.usermodel.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-
 
 
 public class ExcelRead {
@@ -24,6 +18,7 @@ public class ExcelRead {
          * 엑셀 파일에서 첫번째 시트를 가지고 온다.
          */
         Sheet sheet = wb.getSheetAt(0);
+        FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
 
         System.out.println("Sheet 이름: "+ wb.getSheetName(0));
         System.out.println("데이터가 있는 Sheet의 수 :" + wb.getNumberOfSheets());
@@ -31,7 +26,7 @@ public class ExcelRead {
          * sheet에서 유효한(데이터가 있는) 행의 개수를 가져온다.
          */
         int numOfRows = sheet.getPhysicalNumberOfRows();
-        int numOfCells = 0;
+        int lastCellNum = 0;
 
         Row row = null;
         Cell cell = null;
@@ -62,9 +57,9 @@ public class ExcelRead {
 
             if(row != null) {
                 /*
-                 * 가져온 Row의 Cell의 개수를 구한다.
+                 * 가져온 Row의 마지막 column 넘버를 구한다.
                  */
-                numOfCells = row.getPhysicalNumberOfCells();
+                lastCellNum = row.getLastCellNum();
                 /*
                  * 데이터를 담을 맵 객체 초기화
                  */
@@ -72,7 +67,7 @@ public class ExcelRead {
                 /*
                  * cell의 수 만큼 반복한다.
                  */
-                for(int cellIndex = 0; cellIndex < numOfCells; cellIndex++) {
+                for(int cellIndex = 0; cellIndex < lastCellNum; cellIndex++) {
                     /*
                      * Row에서 CellIndex에 해당하는 Cell을 가져온다.
                      */
@@ -93,7 +88,7 @@ public class ExcelRead {
                     /*
                      * map객체의 Cell의 이름을 키(Key)로 데이터를 담는다.
                      */
-                    map.put(cellName, ExcelCellRef.getValue(cell));
+                    map.put(cellName, ExcelCellRef.getValue(evaluator.evaluateInCell(cell)));
                 }
                 /*
                  * 만들어진 Map객체를 List로 넣는다.

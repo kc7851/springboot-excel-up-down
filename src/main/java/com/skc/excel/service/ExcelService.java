@@ -13,7 +13,7 @@ public class ExcelService {
     public void excelUpload(File destFile) {
         ExcelReadOption excelReadOption = new ExcelReadOption();
         excelReadOption.setFilePath(destFile.getAbsolutePath());
-        excelReadOption.setOutputColumns("A","B","C","D","E","F");
+        excelReadOption.setOutputColumns("A","B","C");
         excelReadOption.setStartRow(2);
 
         List<Map<String, String>> excelContent = ExcelRead.read(excelReadOption);
@@ -22,9 +22,6 @@ public class ExcelService {
             System.out.println(article.get("A"));
             System.out.println(article.get("B"));
             System.out.println(article.get("C"));
-            System.out.println(article.get("D"));
-            System.out.println(article.get("E"));
-            System.out.println(article.get("F"));
         }
 
     }
