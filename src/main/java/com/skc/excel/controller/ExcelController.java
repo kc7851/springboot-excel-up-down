@@ -2,8 +2,11 @@ package com.skc.excel.controller;
 
 import com.skc.excel.service.ExcelService;
 import com.skc.excel.utils.ExcelMakeUtils;
+import com.sun.org.apache.xpath.internal.operations.Mod;
+import io.cogi.spring.constant.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -94,6 +97,33 @@ public class ExcelController {
 
         ExcelMakeUtils.buildExcelDocument(hashMapList,filename,strArrHeader,request,response);
 
+    }
+
+    @PostMapping(value = "/excelDownloadView", produces = MediaType.APPLICATION_XLS_VALUE)
+    public ModelAndView excelDownloadView(
+            HttpServletRequest request, HttpServletResponse response
+    ) throws Exception {
+
+        String[] strArrHeader = {"순번","회원 ID","회원명"};
+        String filename = "엑셀파일이름"+ System.currentTimeMillis();
+
+        //이 부분에 실제 엑셀에 넣을 데이터를 구성하면 됨.
+        List<HashMap<String, String>> hashMapList = new ArrayList<>();
+        HashMap<String, String> user1 = new HashMap<>();
+        user1.put("순번", "1");
+        user1.put("id", "id1");
+        user1.put("name", "회원1");
+        HashMap<String, String> user2 = new HashMap<>();
+        user2.put("순번", "2");
+        user2.put("id", null);
+        user2.put("name", "회원2");
+        hashMapList.add(user1);
+        hashMapList.add(user2);
+
+        ModelAndView modelAndView = new ModelAndView("excelDownloadView한글");
+        modelAndView.addObject("result", hashMapList);
+
+        return modelAndView;
     }
 
 }
