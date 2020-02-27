@@ -40,7 +40,7 @@ public class ExcelMakeUtils {
         response.setHeader("Content-Disposition", "attachment; filename = " + fileName + System.currentTimeMillis() + ".xlsx");
 
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet(fileName);
+        Sheet sheet = workbook.createSheet();
 
         Row row = null;
         int rowCount = 0;
